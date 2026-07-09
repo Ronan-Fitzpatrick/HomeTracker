@@ -8,7 +8,25 @@
     <link rel="stylesheet" href="styles/app.css" />
   </head>
   <body>
-    <main id="app"></main>
+    <aside class="sidebar">
+      <a class="brand" href="#today">HomeTracker</a>
+
+      <nav aria-label="Primary">
+        <ul>
+          <li><a href="#today" aria-current="page">Today</a></li>
+          <li><a href="#tasks">Tasks</a></li>
+          <li><a href="#shopping">Shopping</a></li>
+          <li><a href="#projects">Projects</a></li>
+          <li><a href="#home-docs">Home docs</a></li>
+        </ul>
+      </nav>
+    </aside>
+
+    <main id="app">
+      <section id="today">
+        <h1>Today</h1>
+      </section>
+    </main>
     <script type="module" src="src/main.js"></script>
   </body>
 </html>

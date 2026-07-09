@@ -1,3 +1,3 @@
 export function renderApp(root) {
-  root.innerHTML = "";
+  return root;
 }
