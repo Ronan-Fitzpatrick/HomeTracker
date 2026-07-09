@@ -25,6 +25,7 @@ The learning goal is to go back to fundamentals and then rebuild toward modern f
 
 - [Project plan](project-plan.md): product scope, milestones, and delivery phases.
 - [Learning plan](learning-plan.md): topic-by-topic learning roadmap tied to project work.
+- [Phase tracker](phases/README.md): implementation scopes, acceptance criteria, and learning notes.
 
 ## Working Principle
 
