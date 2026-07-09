@@ -2,6 +2,8 @@
 
 **Status:** Ready to start
 
+**Code:** [apps/phase-1-browser-basics](../../apps/phase-1-browser-basics/)
+
 ## Goal
 
 Build a usable local version of the HomeTracker Today workspace with plain HTML, CSS, and JavaScript.
