@@ -78,6 +78,54 @@ h1 {
   line-height: 1.2;
 }
 
+.task-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.task-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-sidebar);
+}
+
+.task-checkbox {
+  inline-size: 1.125rem;
+  block-size: 1.125rem;
+  margin: 0;
+  accent-color: var(--color-primary);
+}
+
+.task-checkbox:focus-visible {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+.task-content {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-inline-size: 0;
+}
+
+.task-title {
+  font-weight: 700;
+}
+
+.task-meta {
+  color: var(--color-muted);
+  font-size: 0.875rem;
+  text-transform: capitalize;
+}
+
 @media (max-width: 48rem) {
   body {
     grid-template-columns: minmax(0, 1fr);
