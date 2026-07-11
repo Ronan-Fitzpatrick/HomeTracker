@@ -1,3 +1,5 @@
+import { createTaskForm } from "./task-form.js";
+
 function createTaskElement(task) {
   const item = document.createElement("li");
   const checkbox = document.createElement("input");
@@ -81,6 +83,7 @@ export function renderApp(root, state) {
 
   section.append(
     heading,
+    createTaskForm(),
     createTaskGroup("Overdue", taskGroups.overdue),
     createTaskGroup("Today", taskGroups.today),
     createTaskGroup("Upcoming", taskGroups.upcoming),

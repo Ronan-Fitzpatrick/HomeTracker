@@ -55,3 +55,13 @@ export function setTaskCompletion(taskId, isCompleted) {
   task.isCompleted = isCompleted;
   return true;
 }
+
+export function addTask(task) {
+  state.tasks.push(task);
+}
+
+export function initializeTasks(tasks) {
+  if (tasks !== null) {
+    state.tasks = tasks;
+  }
+}
