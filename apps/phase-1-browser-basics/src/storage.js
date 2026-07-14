@@ -1,4 +1,4 @@
-export const STORAGE_KEY = "home-tracker:tasks";
+export const STORAGE_KEY = "home-tracker:tasks:v2";
 
 export function loadTasks() {
   try {

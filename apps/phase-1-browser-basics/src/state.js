@@ -3,12 +3,23 @@ import { createTask } from "./task.js";
 function dateFromToday(dayOffset) {
   const date = new Date();
   date.setDate(date.getDate() + dayOffset);
-  return date.toISOString().slice(0, 10);
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+
+  return `${year}-${month}-${day}`;
 }
 
+const threeDaysAgo = dateFromToday(-3);
+const tenDaysAgo = dateFromToday(-10);
 const yesterday = dateFromToday(-1);
 const today = dateFromToday(0);
-const tomorrow = dateFromToday(1);
+const threeDaysFromToday = dateFromToday(3);
+const oneWeekFromToday = dateFromToday(7);
+const twoWeeksFromToday = dateFromToday(14);
+const threeWeeksFromToday = dateFromToday(21);
+const fourWeeksFromToday = dateFromToday(28);
+const oneMonthFromToday = dateFromToday(30);
 
 export const state = {
   tasks: [
@@ -22,20 +33,69 @@ export const state = {
       id: "task_weekly_shop",
       title: "Weekly shop",
       category: "shopping",
-      dueDate: today,
+      dueDate: oneMonthFromToday,
       isCompleted: true
     }),
     createTask({
       id: "task_bins",
       title: "Put out the bins",
       category: "home",
-      dueDate: tomorrow
+      dueDate: twoWeeksFromToday
     }),
     createTask({
       id: "task_boiler_service",
       title: "Book boiler service",
       category: "maintenance",
+      dueDate: threeDaysAgo
+    }),
+    createTask({
+      id: "task_smoke_alarm",
+      title: "Test smoke alarms",
+      category: "maintenance",
+      dueDate: tenDaysAgo
+    }),
+    createTask({
+      id: "task_recycling",
+      title: "Sort recycling",
+      category: "home",
       dueDate: yesterday
+    }),
+    createTask({
+      id: "task_clean_kitchen",
+      title: "Clean the kitchen",
+      category: "home",
+      dueDate: today
+    }),
+    createTask({
+      id: "task_bathroom_supplies",
+      title: "Buy bathroom supplies",
+      category: "shopping",
+      dueDate: threeDaysFromToday
+    }),
+    createTask({
+      id: "task_garden",
+      title: "Tidy the garden",
+      category: "home",
+      dueDate: oneWeekFromToday
+    }),
+    createTask({
+      id: "task_gutter_check",
+      title: "Check the gutters",
+      category: "maintenance",
+      dueDate: threeWeeksFromToday
+    }),
+    createTask({
+      id: "task_light_bulbs",
+      title: "Buy spare light bulbs",
+      category: "shopping",
+      dueDate: fourWeeksFromToday
+    }),
+    createTask({
+      id: "task_fridge",
+      title: "Clean the fridge",
+      category: "home",
+      dueDate: oneWeekFromToday,
+      isCompleted: true
     })
   ],
   filters: {
