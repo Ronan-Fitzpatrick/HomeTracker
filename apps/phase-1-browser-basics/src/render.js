@@ -6,12 +6,14 @@ function createTaskElement(task) {
   const content = document.createElement("div");
   const title = document.createElement("span");
   const meta = document.createElement("span");
+  const deleteButton = document.createElement("button");
 
   item.className = "task-item";
   checkbox.className = "task-checkbox";
   content.className = "task-content";
   title.className = "task-title";
   meta.className = "task-meta";
+  deleteButton.className = "task-delete-button";
 
   checkbox.type = "checkbox";
   checkbox.checked = task.isCompleted;
@@ -25,8 +27,13 @@ function createTaskElement(task) {
     ? `${task.category} · ${task.dueDate}`
     : task.category;
 
+  deleteButton.type = "button";
+  deleteButton.dataset.taskId = task.id;
+  deleteButton.textContent = "Delete";
+  deleteButton.setAttribute("aria-label", `Delete ${task.title}`);
+
   content.append(title, meta);
-  item.append(checkbox, content);
+  item.append(checkbox, content, deleteButton);
 
   return item;
 }

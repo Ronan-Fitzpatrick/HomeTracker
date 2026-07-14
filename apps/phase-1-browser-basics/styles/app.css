@@ -176,6 +176,25 @@ h1 {
   text-transform: capitalize;
 }
 
+.task-delete-button {
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: #a12828;
+  cursor: pointer;
+  font: inherit;
+}
+
+.task-delete-button:hover {
+  background: var(--color-page);
+}
+
+.task-delete-button:focus-visible {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
 @media (max-width: 48rem) {
   body {
     grid-template-columns: minmax(0, 1fr);

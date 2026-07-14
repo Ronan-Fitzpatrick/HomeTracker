@@ -60,6 +60,17 @@ export function addTask(task) {
   state.tasks.push(task);
 }
 
+export function deleteTask(taskId) {
+  const taskIndex = state.tasks.findIndex((task) => task.id === taskId);
+
+  if (taskIndex === -1) {
+    return false;
+  }
+
+  state.tasks.splice(taskIndex, 1);
+  return true;
+}
+
 export function initializeTasks(tasks) {
   if (tasks !== null) {
     state.tasks = tasks;
