@@ -176,6 +176,45 @@ h1 {
   color: var(--color-muted);
 }
 
+.snackbar {
+  position: fixed;
+  inset-inline-end: var(--space-6);
+  inset-block-end: var(--space-6);
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  max-inline-size: min(28rem, calc(100vw - 2 * var(--space-6)));
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-sm);
+  background: var(--color-text);
+  color: var(--color-sidebar);
+  box-shadow: 0 0.5rem 1.5rem rgb(0 0 0 / 20%);
+}
+
+.snackbar[hidden] {
+  display: none;
+}
+
+.snackbar-message {
+  margin: 0;
+}
+
+.snackbar button {
+  padding: var(--space-2);
+  border: 1px solid currentColor;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 700;
+}
+
+.snackbar button:focus-visible {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
 .task-list {
   display: flex;
   flex-direction: column;
@@ -269,6 +308,12 @@ h1 {
 
   #app {
     padding: var(--space-6) var(--space-4);
+  }
+
+  .snackbar {
+    inset-inline: var(--space-4);
+    inset-block-end: var(--space-4);
+    max-inline-size: none;
   }
 
   .task-form {

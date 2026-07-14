@@ -1,4 +1,4 @@
-import { renderApp, renderTaskResults } from "./render.js";
+import { renderApp, renderTaskResults, showSnackbar } from "./render.js";
 import {
   addTask,
   deleteTask,
@@ -15,7 +15,23 @@ import { createTask } from "./task.js";
 
 const app = document.querySelector("#app");
 
-initializeTasks(loadTasks());
+let loadError = false;
+
+try {
+  initializeTasks(loadTasks());
+} catch (error) {
+  console.warn("HomeTracker could not load saved tasks.", error);
+  loadError = true;
+}
+
+function saveCurrentTasks() {
+  if (!saveTasks(state.tasks)) {
+    showSnackbar(app, "Something went wrong. Your changes could not be saved.");
+    return false;
+  }
+
+  return true;
+}
 
 app.addEventListener("input", (event) => {
   const searchInput = event.target;
@@ -36,7 +52,7 @@ app.addEventListener("click", (event) => {
   }
 
   if (deleteTask(deleteButton.dataset.taskId)) {
-    saveTasks(state.tasks);
+    saveCurrentTasks();
     renderTaskResults(app.querySelector("#task-results"), state);
   }
 });
@@ -61,7 +77,7 @@ app.addEventListener("change", (event) => {
   }
 
   setTaskCompletion(control.dataset.taskId, control.checked);
-  saveTasks(state.tasks);
+  saveCurrentTasks();
   renderTaskResults(app.querySelector("#task-results"), state);
 });
 
@@ -76,7 +92,7 @@ app.addEventListener("submit", (event) => {
 
   try {
     addTask(createTask(readTaskForm(form)));
-    saveTasks(state.tasks);
+    saveCurrentTasks();
     form.reset();
     renderTaskResults(app.querySelector("#task-results"), state);
     app.querySelector("#task-title").focus();
@@ -86,3 +102,7 @@ app.addEventListener("submit", (event) => {
 });
 
 renderApp(app, state);
+
+if (loadError) {
+  showSnackbar(app, "Something went wrong. Saved tasks could not be loaded.");
+}

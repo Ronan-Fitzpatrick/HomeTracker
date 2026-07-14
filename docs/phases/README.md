@@ -6,7 +6,7 @@ Each phase is a small, complete learning and product increment. A phase should s
 
 | Phase | Status | Focus |
 | --- | --- | --- |
-| [Phase 1: Browser Basics Task Tracker](phase-1-browser-basics.md) | Ready to start | Build the Today workspace with browser-native tools. |
+| [Phase 1: Browser Basics Task Tracker](phase-1-browser-basics.md) | Complete | Build the Today workspace with browser-native tools. |
 
 ## Phase Template
 

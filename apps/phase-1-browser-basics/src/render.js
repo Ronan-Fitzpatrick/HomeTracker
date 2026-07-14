@@ -1,5 +1,38 @@
 import { createTaskForm } from "./task-form.js";
 
+let snackbarTimeoutId;
+
+function createSnackbar() {
+  const snackbar = document.createElement("div");
+  const message = document.createElement("p");
+  const dismissButton = document.createElement("button");
+
+  snackbar.className = "snackbar";
+  snackbar.hidden = true;
+  snackbar.setAttribute("role", "alert");
+  message.className = "snackbar-message";
+  dismissButton.type = "button";
+  dismissButton.textContent = "Dismiss";
+  dismissButton.addEventListener("click", () => {
+    snackbar.hidden = true;
+    clearTimeout(snackbarTimeoutId);
+  });
+
+  snackbar.append(message, dismissButton);
+  return snackbar;
+}
+
+export function showSnackbar(root, message) {
+  const snackbar = root.querySelector(".snackbar");
+
+  snackbar.querySelector(".snackbar-message").textContent = message;
+  snackbar.hidden = false;
+  clearTimeout(snackbarTimeoutId);
+  snackbarTimeoutId = setTimeout(() => {
+    snackbar.hidden = true;
+  }, 5000);
+}
+
 function createFilterField(labelText, control) {
   const field = document.createElement("div");
   const label = document.createElement("label");
@@ -198,6 +231,6 @@ export function renderApp(root, state) {
     results
   );
 
-  root.replaceChildren(section);
+  root.replaceChildren(section, createSnackbar());
   renderTaskResults(results, state);
 }

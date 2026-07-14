@@ -117,6 +117,14 @@ export function setTaskCompletion(taskId, isCompleted) {
 }
 
 export function addTask(task) {
+  const taskIdAlreadyExists = state.tasks.some(
+    (existingTask) => existingTask.id === task.id
+  );
+
+  if (taskIdAlreadyExists) {
+    throw new Error(`A task with ID "${task.id}" already exists.`);
+  }
+
   state.tasks.push(task);
 }
 

@@ -1,6 +1,6 @@
 # Phase 1: Browser Basics Task Tracker
 
-**Status:** Ready to start
+**Status:** Complete
 
 **Code:** [apps/phase-1-browser-basics](../../apps/phase-1-browser-basics/)
 
@@ -63,9 +63,61 @@ The application state is the task collection plus the current search and filter 
 
 ## Learning Notes
 
-At the end of the phase, record short answers to:
+### State And Rendering
 
-- What data belongs in JavaScript memory, the DOM, and localStorage?
-- What event starts each user action, and what changes afterward?
-- How does a state update become visible pixels in the browser?
-- Which accessibility behaviors came from native HTML, and which required extra code?
+My main takeaway is that state is the source of truth. The DOM shows the current
+state, and `localStorage` keeps the tasks across reloads.
+
+```mermaid
+flowchart LR
+    A["User action"] --> B["Update state"]
+    B --> C["Save tasks"]
+    B --> D["Render results"]
+    C -.->|failure| E["Show error snackbar"]
+```
+
+Search and filters are temporary UI state. The filtered and grouped task lists
+are derived from the original tasks rather than stored as extra copies.
+
+### IDs And Array Methods
+
+Task IDs let me target the correct task even when the list has been filtered or
+reordered. Array positions are not reliable identities.
+
+- `findIndex()` finds a task's position and returns `-1` when it cannot.
+- `splice()` removes an item at a position.
+- `some()` is JavaScript's equivalent of `any()` in other languages.
+- `filter()` creates a new array of matching items.
+
+UUID collisions are very unlikely, but I still enforce unique IDs when adding
+and loading tasks.
+
+### Rendering Boundaries
+
+Rerendering the whole app after every search keystroke destroyed the search
+input, which meant manually restoring its value, focus, and cursor.
+
+Splitting out `renderTaskResults()` means only the results change. The browser
+keeps the search input alive, so typing feels smoother and native input state is
+preserved. If I have to keep repairing focus after a render, the render boundary
+is probably too broad.
+
+### Browser And Accessibility Basics
+
+Native controls already provide useful keyboard behavior: Space toggles
+checkboxes, arrow keys navigate selects, and Tab moves between controls. Native
+date inputs also have browser-specific segmented editing, which explains why a
+year may need to be re-entered in full.
+
+I still need to provide clear labels, visible focus styles, contextual accessible
+names, validation messages, and error feedback. The layout also needs checking
+with long content, narrow screens, keyboard navigation, and zoom rather than
+only at the default desktop size.
+
+### Storage Is An Untrusted Boundary
+
+Valid JSON is not necessarily valid task data. I validate field types,
+categories, date format, and unique IDs before loaded data reaches state.
+
+Load failures fall back to seed tasks. Save failures show a dismissible snackbar
+because the in-memory UI may no longer match what will return after a reload.
