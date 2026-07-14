@@ -1,8 +1,11 @@
-import { renderApp } from "./render.js";
+import { renderApp, renderTaskResults } from "./render.js";
 import {
   addTask,
   deleteTask,
   initializeTasks,
+  setCategoryFilter,
+  setSearchQuery,
+  setStatusFilter,
   setTaskCompletion,
   state
 } from "./state.js";
@@ -14,6 +17,17 @@ const app = document.querySelector("#app");
 
 initializeTasks(loadTasks());
 
+app.addEventListener("input", (event) => {
+  const searchInput = event.target;
+
+  if (!searchInput.matches("#task-search")) {
+    return;
+  }
+
+  setSearchQuery(searchInput.value);
+  renderTaskResults(app.querySelector("#task-results"), state);
+});
+
 app.addEventListener("click", (event) => {
   const deleteButton = event.target.closest(".task-delete-button[data-task-id]");
 
@@ -23,20 +37,32 @@ app.addEventListener("click", (event) => {
 
   if (deleteTask(deleteButton.dataset.taskId)) {
     saveTasks(state.tasks);
-    renderApp(app, state);
+    renderTaskResults(app.querySelector("#task-results"), state);
   }
 });
 
 app.addEventListener("change", (event) => {
-  const checkbox = event.target;
+  const control = event.target;
 
-  if (!checkbox.matches(".task-checkbox[data-task-id]")) {
+  if (control.matches("#category-filter")) {
+    setCategoryFilter(control.value);
+    renderTaskResults(app.querySelector("#task-results"), state);
     return;
   }
 
-  setTaskCompletion(checkbox.dataset.taskId, checkbox.checked);
+  if (control.matches("#status-filter")) {
+    setStatusFilter(control.value);
+    renderTaskResults(app.querySelector("#task-results"), state);
+    return;
+  }
+
+  if (!control.matches(".task-checkbox[data-task-id]")) {
+    return;
+  }
+
+  setTaskCompletion(control.dataset.taskId, control.checked);
   saveTasks(state.tasks);
-  renderApp(app, state);
+  renderTaskResults(app.querySelector("#task-results"), state);
 });
 
 app.addEventListener("submit", (event) => {
@@ -51,7 +77,8 @@ app.addEventListener("submit", (event) => {
   try {
     addTask(createTask(readTaskForm(form)));
     saveTasks(state.tasks);
-    renderApp(app, state);
+    form.reset();
+    renderTaskResults(app.querySelector("#task-results"), state);
     app.querySelector("#task-title").focus();
   } catch (error) {
     showTaskFormError(form, error.message);

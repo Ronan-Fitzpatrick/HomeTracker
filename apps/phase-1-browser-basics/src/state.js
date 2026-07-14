@@ -131,6 +131,18 @@ export function deleteTask(taskId) {
   return true;
 }
 
+export function setCategoryFilter(category) {
+  state.filters.category = category;
+}
+
+export function setSearchQuery(searchQuery) {
+  state.filters.searchQuery = searchQuery;
+}
+
+export function setStatusFilter(status) {
+  state.filters.status = status;
+}
+
 export function initializeTasks(tasks) {
   if (tasks !== null) {
     state.tasks = tasks;

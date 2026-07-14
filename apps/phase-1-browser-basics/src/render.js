@@ -1,5 +1,71 @@
 import { createTaskForm } from "./task-form.js";
 
+function createFilterField(labelText, control) {
+  const field = document.createElement("div");
+  const label = document.createElement("label");
+
+  field.className = "filter-field";
+  label.htmlFor = control.id;
+  label.textContent = labelText;
+  field.append(label, control);
+
+  return field;
+}
+
+function createSelect(id, value, options) {
+  const select = document.createElement("select");
+
+  select.id = id;
+
+  for (const [optionValue, optionLabel] of options) {
+    const option = document.createElement("option");
+    option.value = optionValue;
+    option.textContent = optionLabel;
+    option.selected = optionValue === value;
+    select.append(option);
+  }
+
+  return select;
+}
+
+function createTaskFilters(filters) {
+  const controls = document.createElement("section");
+  const heading = document.createElement("h2");
+  const search = document.createElement("input");
+  const category = createSelect("category-filter", filters.category, [
+    ["all", "All categories"],
+    ["home", "Home"],
+    ["maintenance", "Maintenance"],
+    ["shopping", "Shopping"]
+  ]);
+  const status = createSelect("status-filter", filters.status, [
+    ["all", "All tasks"],
+    ["active", "Active"],
+    ["completed", "Completed"]
+  ]);
+
+  controls.className = "task-filters";
+  heading.className = "visually-hidden";
+  heading.id = "task-filters-heading";
+  heading.textContent = "Filter tasks";
+  controls.setAttribute("aria-labelledby", heading.id);
+
+  search.id = "task-search";
+  search.type = "search";
+  search.autocomplete = "off";
+  search.value = filters.searchQuery;
+  search.placeholder = "Search by title";
+
+  controls.append(
+    heading,
+    createFilterField("Search tasks", search),
+    createFilterField("Category", category),
+    createFilterField("Status", status)
+  );
+
+  return controls;
+}
+
 function createTaskElement(task) {
   const item = document.createElement("li");
   const checkbox = document.createElement("input");
@@ -61,6 +127,23 @@ function groupTasks(tasks, today) {
   return groups;
 }
 
+function filterTasks(tasks, filters) {
+  const query = filters.searchQuery.trim().toLowerCase();
+
+  return tasks.filter((task) => {
+    const matchesSearch =
+      query === "" || task.title.toLowerCase().includes(query);
+    const matchesCategory =
+      filters.category === "all" || task.category === filters.category;
+    const matchesStatus =
+      filters.status === "all" ||
+      (filters.status === "active" && !task.isCompleted) ||
+      (filters.status === "completed" && task.isCompleted);
+
+    return matchesSearch && matchesCategory && matchesStatus;
+  });
+}
+
 function createTaskGroup(title, tasks) {
   const section = document.createElement("section");
   const heading = document.createElement("h2");
@@ -78,23 +161,43 @@ function createTaskGroup(title, tasks) {
   return section;
 }
 
+export function renderTaskResults(root, state) {
+  const today = new Date().toISOString().slice(0, 10);
+  const filteredTasks = filterTasks(state.tasks, state.filters);
+  const taskGroups = groupTasks(filteredTasks, today);
+
+  if (filteredTasks.length === 0) {
+    const emptyMessage = document.createElement("p");
+    emptyMessage.className = "empty-results";
+    emptyMessage.textContent = "No tasks match your search and filters.";
+    root.replaceChildren(emptyMessage);
+  } else {
+    root.replaceChildren(
+      createTaskGroup("Overdue", taskGroups.overdue),
+      createTaskGroup("Today", taskGroups.today),
+      createTaskGroup("Upcoming", taskGroups.upcoming),
+      createTaskGroup("Completed", taskGroups.completed)
+    );
+  }
+}
+
 export function renderApp(root, state) {
   const section = document.createElement("section");
   const heading = document.createElement("h1");
-  const today = new Date().toISOString().slice(0, 10);
-  const taskGroups = groupTasks(state.tasks, today);
+  const results = document.createElement("div");
 
   heading.id = "task-list-heading";
   heading.textContent = "Tasks";
+  results.id = "task-results";
   section.setAttribute("aria-labelledby", heading.id);
 
   section.append(
     heading,
     createTaskForm(),
-    createTaskGroup("Overdue", taskGroups.overdue),
-    createTaskGroup("Today", taskGroups.today),
-    createTaskGroup("Upcoming", taskGroups.upcoming),
-    createTaskGroup("Completed", taskGroups.completed)
+    createTaskFilters(state.filters),
+    results
   );
+
   root.replaceChildren(section);
+  renderTaskResults(results, state);
 }
