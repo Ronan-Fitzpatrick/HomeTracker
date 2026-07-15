@@ -1,9 +1,10 @@
 import { useState } from 'react'
+import { TASK_CATEGORY, TASK_CATEGORY_OPTIONS } from '../../data/taskOptions.js'
 import FormField from './FormField.jsx'
 
 const INITIAL_FORM = {
   title: '',
-  category: 'home',
+  category: TASK_CATEGORY.HOME,
   dueDate: '',
 }
 
@@ -61,9 +62,11 @@ function TaskForm({ onTaskAdd }) {
           value={formValues.category}
           onChange={handleFieldChange}
         >
-          <option value="home">Home</option>
-          <option value="maintenance">Maintenance</option>
-          <option value="shopping">Shopping</option>
+          {TASK_CATEGORY_OPTIONS.map((option) => (
+            <option key={option.value} value={option.value}>
+              {option.label}
+            </option>
+          ))}
         </select>
       </FormField>
 

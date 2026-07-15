@@ -1,12 +1,13 @@
 import { useState } from 'react'
+import { ALL_TASKS_FILTER } from '../../data/taskOptions.js'
 import TaskFilters from './TaskFilters.jsx'
 import TaskForm from './TaskForm.jsx'
 import TaskResults from './TaskResults.jsx'
 
 const INITIAL_FILTERS = {
   searchQuery: '',
-  category: 'all',
-  status: 'all',
+  category: ALL_TASKS_FILTER,
+  status: ALL_TASKS_FILTER,
 }
 
 function TaskWorkspace({

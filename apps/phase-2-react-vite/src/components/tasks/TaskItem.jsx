@@ -1,5 +1,3 @@
-import { memo } from 'react'
-
 function TaskItem({ task, onCompletionChange, onDelete }) {
   const taskMeta = task.dueDate
     ? `${task.category} · ${task.dueDate}`
@@ -30,4 +28,4 @@ function TaskItem({ task, onCompletionChange, onDelete }) {
   )
 }
 
-export default memo(TaskItem)
+export default TaskItem

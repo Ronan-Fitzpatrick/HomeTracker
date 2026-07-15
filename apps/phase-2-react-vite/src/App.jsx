@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react'
+import { useState } from 'react'
 import './App.css'
 import Sidebar from './components/layout/Sidebar.jsx'
 import TaskWorkspace from './components/tasks/TaskWorkspace.jsx'
@@ -7,7 +7,7 @@ import { seedTasks } from './data/seedTasks.js'
 function App() {
   const [tasks, setTasks] = useState(seedTasks)
 
-  const handleTaskAdd = useCallback((taskInput) => {
+  function handleTaskAdd(taskInput) {
     const newTask = {
       id: `task_${crypto.randomUUID()}`,
       ...taskInput,
@@ -15,21 +15,21 @@ function App() {
     }
 
     setTasks((currentTasks) => [...currentTasks, newTask])
-  }, [])
+  }
 
-  const handleTaskCompletionChange = useCallback((taskId, isCompleted) => {
+  function handleTaskCompletionChange(taskId, isCompleted) {
     setTasks((currentTasks) =>
       currentTasks.map((task) =>
         task.id === taskId ? { ...task, isCompleted } : task,
       ),
     )
-  }, [])
+  }
 
-  const handleTaskDelete = useCallback((taskId) => {
+  function handleTaskDelete(taskId) {
     setTasks((currentTasks) =>
       currentTasks.filter((task) => task.id !== taskId),
     )
-  }, [])
+  }
 
   return (
     <div className="app-layout">

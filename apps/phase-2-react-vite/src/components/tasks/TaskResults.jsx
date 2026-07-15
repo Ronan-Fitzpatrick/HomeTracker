@@ -1,4 +1,5 @@
 import TaskGroup from './TaskGroup.jsx'
+import { ALL_TASKS_FILTER, TASK_STATUS } from '../../data/taskOptions.js'
 
 function getToday() {
   const date = new Date()
@@ -40,11 +41,11 @@ function filterTasks(tasks, filters) {
     const matchesSearch =
       searchQuery === '' || task.title.toLowerCase().includes(searchQuery)
     const matchesCategory =
-      filters.category === 'all' || task.category === filters.category
+      filters.category === ALL_TASKS_FILTER || task.category === filters.category
     const matchesStatus =
-      filters.status === 'all' ||
-      (filters.status === 'active' && !task.isCompleted) ||
-      (filters.status === 'completed' && task.isCompleted)
+      filters.status === ALL_TASKS_FILTER ||
+      (filters.status === TASK_STATUS.ACTIVE && !task.isCompleted) ||
+      (filters.status === TASK_STATUS.COMPLETED && task.isCompleted)
 
     return matchesSearch && matchesCategory && matchesStatus
   })

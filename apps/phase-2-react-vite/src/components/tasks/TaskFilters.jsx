@@ -1,3 +1,8 @@
+import {
+  ALL_TASKS_FILTER,
+  TASK_CATEGORY_OPTIONS,
+  TASK_STATUS_OPTIONS,
+} from '../../data/taskOptions.js'
 import FormField from './FormField.jsx'
 
 function TaskFilters({ filters, onFilterChange }) {
@@ -26,10 +31,12 @@ function TaskFilters({ filters, onFilterChange }) {
           value={filters.category}
           onChange={(event) => onFilterChange('category', event.target.value)}
         >
-          <option value="all">All categories</option>
-          <option value="home">Home</option>
-          <option value="maintenance">Maintenance</option>
-          <option value="shopping">Shopping</option>
+          <option value={ALL_TASKS_FILTER}>All categories</option>
+          {TASK_CATEGORY_OPTIONS.map((option) => (
+            <option key={option.value} value={option.value}>
+              {option.label}
+            </option>
+          ))}
         </select>
       </FormField>
 
@@ -39,9 +46,12 @@ function TaskFilters({ filters, onFilterChange }) {
           value={filters.status}
           onChange={(event) => onFilterChange('status', event.target.value)}
         >
-          <option value="all">All tasks</option>
-          <option value="active">Active</option>
-          <option value="completed">Completed</option>
+          <option value={ALL_TASKS_FILTER}>All tasks</option>
+          {TASK_STATUS_OPTIONS.map((option) => (
+            <option key={option.value} value={option.value}>
+              {option.label}
+            </option>
+          ))}
         </select>
       </FormField>
     </section>
