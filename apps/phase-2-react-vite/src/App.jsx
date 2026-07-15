@@ -1,5 +1,6 @@
 import { useCallback, useState } from 'react'
 import './App.css'
+import Sidebar from './components/layout/Sidebar.jsx'
 import TaskWorkspace from './components/tasks/TaskWorkspace.jsx'
 import { seedTasks } from './data/seedTasks.js'
 
@@ -31,22 +32,26 @@ function App() {
   }, [])
 
   return (
-    <main className="app-shell">
-      <header className="app-header">
-        <p className="eyebrow">HomeTracker · Phase 2</p>
-        <h1>Tasks</h1>
-        <p className="intro">
-          Keep household jobs visible, organised, and moving.
-        </p>
-      </header>
+    <div className="app-layout">
+      <Sidebar />
 
-      <TaskWorkspace
-        tasks={tasks}
-        onTaskAdd={handleTaskAdd}
-        onTaskCompletionChange={handleTaskCompletionChange}
-        onTaskDelete={handleTaskDelete}
-      />
-    </main>
+      <main className="app-shell" id="tasks">
+        <header className="app-header">
+          <p className="eyebrow">HomeTracker · Phase 2</p>
+          <h1>Tasks</h1>
+          <p className="intro">
+            Keep household jobs visible, organised, and moving.
+          </p>
+        </header>
+
+        <TaskWorkspace
+          tasks={tasks}
+          onTaskAdd={handleTaskAdd}
+          onTaskCompletionChange={handleTaskCompletionChange}
+          onTaskDelete={handleTaskDelete}
+        />
+      </main>
+    </div>
   )
 }
 
