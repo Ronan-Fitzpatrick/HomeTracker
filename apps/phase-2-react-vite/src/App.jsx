@@ -1,14 +1,51 @@
+import { useCallback, useState } from 'react'
 import './App.css'
+import TaskWorkspace from './components/tasks/TaskWorkspace.jsx'
+import { seedTasks } from './data/seedTasks.js'
 
 function App() {
+  const [tasks, setTasks] = useState(seedTasks)
+
+  const handleTaskAdd = useCallback((taskInput) => {
+    const newTask = {
+      id: `task_${crypto.randomUUID()}`,
+      ...taskInput,
+      isCompleted: false,
+    }
+
+    setTasks((currentTasks) => [...currentTasks, newTask])
+  }, [])
+
+  const handleTaskCompletionChange = useCallback((taskId, isCompleted) => {
+    setTasks((currentTasks) =>
+      currentTasks.map((task) =>
+        task.id === taskId ? { ...task, isCompleted } : task,
+      ),
+    )
+  }, [])
+
+  const handleTaskDelete = useCallback((taskId) => {
+    setTasks((currentTasks) =>
+      currentTasks.filter((task) => task.id !== taskId),
+    )
+  }, [])
+
   return (
     <main className="app-shell">
-      <p className="eyebrow">HomeTracker · Phase 2</p>
-      <h1>React and Vite prototype</h1>
-      <p className="intro">
-        This phase rebuilds the task tracker with React before extending it with
-        shopping and dashboard views.
-      </p>
+      <header className="app-header">
+        <p className="eyebrow">HomeTracker · Phase 2</p>
+        <h1>Tasks</h1>
+        <p className="intro">
+          Keep household jobs visible, organised, and moving.
+        </p>
+      </header>
+
+      <TaskWorkspace
+        tasks={tasks}
+        onTaskAdd={handleTaskAdd}
+        onTaskCompletionChange={handleTaskCompletionChange}
+        onTaskDelete={handleTaskDelete}
+      />
     </main>
   )
 }
