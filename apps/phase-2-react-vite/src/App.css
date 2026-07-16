@@ -96,6 +96,16 @@ h1 {
   color: #7d2020;
 }
 
+.workspace-placeholder {
+  max-inline-size: 42rem;
+  margin: 0;
+  padding: var(--space-6);
+  border: 1px dashed var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  color: var(--color-muted);
+}
+
 .visually-hidden {
   position: absolute;
   inline-size: 1px;

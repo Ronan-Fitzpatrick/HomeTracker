@@ -1,25 +1,23 @@
-const NAV_ITEMS = [
-  { href: '#today', label: 'Today' },
-  { href: '#tasks', label: 'Tasks', isCurrent: true },
-  { href: '#shopping', label: 'Shopping' },
-]
+import { WORKSPACE, WORKSPACE_OPTIONS } from '../../data/workspaceOptions.js'
 
-function Sidebar() {
+function Sidebar({ activeWorkspace }) {
   return (
     <aside className="sidebar">
-      <a className="brand" href="#tasks">
+      <a className="brand" href={`#${WORKSPACE.TODAY}`}>
         HomeTracker
       </a>
 
       <nav aria-label="Primary">
         <ul>
-          {NAV_ITEMS.map((item) => (
-            <li key={item.href}>
+          {WORKSPACE_OPTIONS.map((workspace) => (
+            <li key={workspace.value}>
               <a
-                href={item.href}
-                aria-current={item.isCurrent ? 'page' : undefined}
+                href={`#${workspace.value}`}
+                aria-current={
+                  workspace.value === activeWorkspace ? 'page' : undefined
+                }
               >
-                {item.label}
+                {workspace.label}
               </a>
             </li>
           ))}
