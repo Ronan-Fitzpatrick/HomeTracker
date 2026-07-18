@@ -1,13 +1,20 @@
 import { useEffect, useState } from 'react'
 import './App.css'
 import Sidebar from './components/layout/Sidebar.jsx'
+import ShoppingWorkspace from './components/shopping/ShoppingWorkspace.jsx'
 import TaskWorkspace from './components/tasks/TaskWorkspace.jsx'
+import { seedShoppingItems } from './data/seedShoppingItems.js'
 import { seedTasks } from './data/seedTasks.js'
 import { WORKSPACE, WORKSPACE_OPTIONS } from './data/workspaceOptions.js'
 import { createTask, validateTasks } from './domain/task.js'
+import {
+  createShoppingItem,
+  validateShoppingItems,
+} from './domain/shoppingItem.js'
 import { useLocalStorage } from './hooks/useLocalStorage.js'
 
 const TASK_STORAGE_KEY = 'home-tracker:tasks:v2'
+const SHOPPING_STORAGE_KEY = 'home-tracker:shopping:v1'
 
 const WORKSPACE_COPY = {
   [WORKSPACE.TODAY]: {
@@ -22,7 +29,6 @@ const WORKSPACE_COPY = {
   [WORKSPACE.SHOPPING]: {
     title: 'Shopping',
     intro: 'Keep a simple list of what the household needs.',
-    placeholder: 'The shopping workspace is the next delivery slice.',
   },
 }
 
@@ -45,6 +51,15 @@ function App() {
     key: TASK_STORAGE_KEY,
     initialValue: seedTasks,
     validate: validateTasks,
+  })
+  const {
+    value: shoppingItems,
+    setValue: setShoppingItems,
+    error: shoppingStorageError,
+  } = useLocalStorage({
+    key: SHOPPING_STORAGE_KEY,
+    initialValue: seedShoppingItems,
+    validate: validateShoppingItems,
   })
   const workspaceCopy = WORKSPACE_COPY[activeWorkspace]
 
@@ -80,6 +95,31 @@ function App() {
     )
   }
 
+  function handleShoppingItemAdd(itemInput) {
+    const newItem = createShoppingItem(itemInput)
+    setShoppingItems((currentItems) => [...currentItems, newItem])
+  }
+
+  function handleShoppingItemBoughtChange(itemId, isBought) {
+    setShoppingItems((currentItems) =>
+      currentItems.map((item) =>
+        item.id === itemId ? { ...item, isBought } : item,
+      ),
+    )
+  }
+
+  function handleShoppingItemDelete(itemId) {
+    setShoppingItems((currentItems) =>
+      currentItems.filter((item) => item.id !== itemId),
+    )
+  }
+
+  function handleClearBoughtItems() {
+    setShoppingItems((currentItems) =>
+      currentItems.filter((item) => !item.isBought),
+    )
+  }
+
   return (
     <div className="app-layout">
       <Sidebar activeWorkspace={activeWorkspace} />
@@ -106,6 +146,24 @@ function App() {
               onTaskAdd={handleTaskAdd}
               onTaskCompletionChange={handleTaskCompletionChange}
               onTaskDelete={handleTaskDelete}
+            />
+          </>
+        ) : activeWorkspace === WORKSPACE.SHOPPING ? (
+          <>
+            {shoppingStorageError ? (
+              <p className="storage-alert" role="alert">
+                {shoppingStorageError.operation === 'read'
+                  ? 'Saved shopping data was invalid. The default items were restored.'
+                  : 'Shopping items are available for this session, but changes could not be saved.'}
+              </p>
+            ) : null}
+
+            <ShoppingWorkspace
+              items={shoppingItems}
+              onItemAdd={handleShoppingItemAdd}
+              onItemBoughtChange={handleShoppingItemBoughtChange}
+              onItemDelete={handleShoppingItemDelete}
+              onClearBought={handleClearBoughtItems}
             />
           </>
         ) : (
