@@ -17,6 +17,7 @@
   --color-warning-soft: #fff4e6;
   --color-danger: #ad3038;
   --color-danger-soft: #fff0f1;
+  --shadow-card: 0 0.25rem 1rem rgb(29 36 51 / 8%);
 
   --space-1: 0.25rem;
   --space-2: 0.5rem;

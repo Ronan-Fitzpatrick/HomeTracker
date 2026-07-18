@@ -12,9 +12,7 @@ function DashboardCard({
   return (
     <article className={`dashboard-card dashboard-card--${tone}`}>
       <header className="dashboard-card__header">
-        <span className="dashboard-card__count" aria-hidden="true">
-          {count}
-        </span>
+        <span className="dashboard-card__count">{count}</span>
         <div>
           <h2>{label}</h2>
           <p>{description}</p>
