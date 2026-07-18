@@ -67,3 +67,19 @@ export function validateTasks(tasks) {
 
   return tasks
 }
+
+export function getLocalDateString(date = new Date()) {
+  const year = date.getFullYear()
+  const month = String(date.getMonth() + 1).padStart(2, '0')
+  const day = String(date.getDate()).padStart(2, '0')
+
+  return `${year}-${month}-${day}`
+}
+
+export function isTaskOverdue(task, today = getLocalDateString()) {
+  return !task.isCompleted && task.dueDate !== null && task.dueDate < today
+}
+
+export function isTaskDueToday(task, today = getLocalDateString()) {
+  return !task.isCompleted && task.dueDate === today
+}

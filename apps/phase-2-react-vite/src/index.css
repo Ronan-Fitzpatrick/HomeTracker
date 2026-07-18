@@ -9,6 +9,14 @@
   --color-primary: #2847b8;
   --color-nav-current: #eef1ff;
   --color-focus: #1c6dd0;
+  --color-info: #2847b8;
+  --color-info-soft: #eef1ff;
+  --color-success: #287a55;
+  --color-success-soft: #edf8f1;
+  --color-warning: #9a4f0c;
+  --color-warning-soft: #fff4e6;
+  --color-danger: #ad3038;
+  --color-danger-soft: #fff0f1;
 
   --space-1: 0.25rem;
   --space-2: 0.5rem;

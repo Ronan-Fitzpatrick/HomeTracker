@@ -1,17 +1,13 @@
 import TaskGroup from './TaskGroup.jsx'
 import { ALL_TASKS_FILTER, TASK_STATUS } from '../../data/taskOptions.js'
-
-function getToday() {
-  const date = new Date()
-  const year = date.getFullYear()
-  const month = String(date.getMonth() + 1).padStart(2, '0')
-  const day = String(date.getDate()).padStart(2, '0')
-
-  return `${year}-${month}-${day}`
-}
+import {
+  getLocalDateString,
+  isTaskDueToday,
+  isTaskOverdue,
+} from '../../domain/task.js'
 
 function groupTasks(tasks) {
-  const today = getToday()
+  const today = getLocalDateString()
   const groups = {
     Overdue: [],
     Today: [],
@@ -22,9 +18,9 @@ function groupTasks(tasks) {
   for (const task of tasks) {
     if (task.isCompleted) {
       groups.Completed.push(task)
-    } else if (task.dueDate && task.dueDate < today) {
+    } else if (isTaskOverdue(task, today)) {
       groups.Overdue.push(task)
-    } else if (task.dueDate === today) {
+    } else if (isTaskDueToday(task, today)) {
       groups.Today.push(task)
     } else {
       groups.Upcoming.push(task)

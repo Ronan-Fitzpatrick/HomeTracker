@@ -1,12 +1,19 @@
 import { useEffect, useState } from 'react'
 import './App.css'
+import TodayDashboard from './components/dashboard/TodayDashboard.jsx'
 import Sidebar from './components/layout/Sidebar.jsx'
 import ShoppingWorkspace from './components/shopping/ShoppingWorkspace.jsx'
 import TaskWorkspace from './components/tasks/TaskWorkspace.jsx'
 import { seedShoppingItems } from './data/seedShoppingItems.js'
 import { seedTasks } from './data/seedTasks.js'
 import { WORKSPACE, WORKSPACE_OPTIONS } from './data/workspaceOptions.js'
-import { createTask, validateTasks } from './domain/task.js'
+import {
+  createTask,
+  getLocalDateString,
+  isTaskDueToday,
+  isTaskOverdue,
+  validateTasks,
+} from './domain/task.js'
 import {
   createShoppingItem,
   validateShoppingItems,
@@ -20,7 +27,6 @@ const WORKSPACE_COPY = {
   [WORKSPACE.TODAY]: {
     title: 'Today',
     intro: 'See the household work that needs your attention today.',
-    placeholder: 'Dashboard summaries will be built after the shopping workspace.',
   },
   [WORKSPACE.TASKS]: {
     title: 'Tasks',
@@ -62,6 +68,22 @@ function App() {
     validate: validateShoppingItems,
   })
   const workspaceCopy = WORKSPACE_COPY[activeWorkspace]
+  const today = getLocalDateString()
+  const overdueTasks = tasks
+    .filter((task) => isTaskOverdue(task, today))
+    .sort((firstTask, secondTask) =>
+      firstTask.dueDate.localeCompare(secondTask.dueDate),
+    )
+  const dueTodayTasks = tasks.filter((task) => isTaskDueToday(task, today))
+  const remainingShoppingItems = shoppingItems.filter((item) => !item.isBought)
+  const dashboardSummary = {
+    overdueTaskCount: overdueTasks.length,
+    overdueTasks: overdueTasks.slice(0, 5),
+    dueTodayTaskCount: dueTodayTasks.length,
+    dueTodayTasks: dueTodayTasks.slice(0, 5),
+    remainingShoppingCount: remainingShoppingItems.length,
+    remainingShoppingItems: remainingShoppingItems.slice(0, 5),
+  }
 
   useEffect(() => {
     function handleHashChange() {
@@ -167,7 +189,7 @@ function App() {
             />
           </>
         ) : (
-          <p className="workspace-placeholder">{workspaceCopy.placeholder}</p>
+          <TodayDashboard summary={dashboardSummary} />
         )}
       </main>
     </div>
